@@ -1,0 +1,41 @@
+{
+    "name"       : "nano7/http",
+    "description": "The Nano7 Http package.",
+    "license"    : "GPL-3.0-only",
+
+    "authors"    : [
+        {
+            "name" : "Bruno Goncalves",
+            "email": "bugotech@gmail.com"
+        }
+    ],
+
+    "require": {
+        "php"                   : ">=5.5.0",
+        "nano7/foundation"      : "dev-master",
+        "illuminate/http"       : "5.4.*",
+        "nikic/fast-route"      : "1.3.*"
+
+    },
+
+    "autoload": {
+        "files": [
+            "helpers.php"
+        ],
+
+        "psr-4": {
+            "Nano7\\Http\\": ""
+        }
+    },
+
+    "extra": {
+        "nano7": {
+            "providers": [
+                "Nano7\\Http\\WebServiceProviders"
+            ]
+        }
+    },
+
+    "minimum-stability": "dev",
+    "prefer-stable"    : true
+}
