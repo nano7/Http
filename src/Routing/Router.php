@@ -92,7 +92,7 @@ class Router
     protected function prepareRoutes()
     {
         $this->dispatcher = \FastRoute\simpleDispatcher(function (\FastRoute\RouteCollector $collector) {
-            $router = new RouteCollection($collector);
+            $router = new RouteCollection($collector, '', []);
 
             $route_file = app_path('routes.php');
             if (file_exists($route_file)) {

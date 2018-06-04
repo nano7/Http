@@ -85,7 +85,7 @@ class Route
     }
 
     /**
-     * @param null $middleware
+     * @param null|string|array $middleware
      * @return $this|array
      */
     public function middlewares($middleware = null)
@@ -94,13 +94,17 @@ class Route
             return $this->middlewares;
         }
 
-        $this->middlewares[] = $middleware;
+        if (is_array($middleware)) {
+            $this->middlewares = array_merge([], $this->middlewares, $middleware);
+        } else {
+            $this->middlewares[] = $middleware;
+        }
 
         return $this;
     }
 
     /**
-     * @param $middleware
+     * @param string|array $middleware
      * @return $this
      */
     public function middleware($middleware)

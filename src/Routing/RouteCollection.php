@@ -10,11 +10,42 @@ class RouteCollection
     protected $collector;
 
     /**
-     * @param RouteCollector $collector
+     * @var string
      */
-    public function __construct(RouteCollector $collector)
+    protected $prefix = '';
+
+    /**
+     * @var array
+     */
+    protected $middlewares = [];
+
+    /**
+     * @param RouteCollector $collector
+     * @param string $prefix
+     * @param array $middlewares
+     */
+    public function __construct(RouteCollector $collector, $prefix, $middlewares)
     {
         $this->collector = $collector;
+        $this->prefix = $prefix;
+        $this->middlewares = $middlewares;
+    }
+
+    /**
+     * @param Route $route
+     * @return Route
+     */
+    protected function addRoute(Route $route)
+    {
+        // Adicionar prefixo do group
+        $uri = $this->prefix . $route->getUri();
+
+        $this->collector->addRoute($route->getMethods(), $uri, $route);
+
+        // Adicionar middleware do group
+        $route->middlewares($this->middlewares);
+
+        return $route;
     }
 
     /**
@@ -28,11 +59,7 @@ class RouteCollection
      */
     public function get($route, $handler)
     {
-        $route = new Route(['GET','HEAD'], $route, $handler);
-
-        $this->collector->addRoute($route->getMethods(), $route->getUri(), $route);
-
-        return $route;
+        return $this->addRoute(new Route(['GET','HEAD'], $route, $handler));
     }
 
     /**
@@ -46,11 +73,7 @@ class RouteCollection
      */
     public function post($route, $handler)
     {
-        $route = new Route(['POST'], $route, $handler);
-
-        $this->collector->addRoute($route->getMethods(), $route->getUri(), $route);
-
-        return $route;
+        return $this->addRoute(new Route(['POST'], $route, $handler));
     }
 
     /**
@@ -64,11 +87,7 @@ class RouteCollection
      */
     public function put($route, $handler)
     {
-        $route = new Route(['PUT'], $route, $handler);
-
-        $this->collector->addRoute($route->getMethods(), $route->getUri(), $route);
-
-        return $route;
+        return $this->addRoute(new Route(['PUT'], $route, $handler));
     }
 
     /**
@@ -82,11 +101,7 @@ class RouteCollection
      */
     public function delete($route, $handler)
     {
-        $route = new Route(['DELETE'], $route, $handler);
-
-        $this->collector->addRoute($route->getMethods(), $route->getUri(), $route);
-
-        return $route;
+        return $this->addRoute(new Route(['DELETE'], $route, $handler));
     }
 
     /**
@@ -100,21 +115,35 @@ class RouteCollection
      */
     public function any($route, $handler)
     {
-        $route = new Route(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $route, $handler);
-
-        $this->collector->addRoute($route->getMethods(), $route->getUri(), $route);
-
-        return $route;
+        return $this->addRoute(new Route(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $route, $handler));
     }
 
     /**
-     * @param $prefix
-     * @param callable $callback
+     * @param $options
+     * @param \Closure $callback
+     * @return $this
      */
-    public function group($prefix, callable $callback)
+    public function group($options, \Closure $callback = null)
     {
-        $this->collector->addGroup($prefix, function($collector) use ($callback) {
-            $callback(new RouteCollection($collector));
-        });
+        // Verificar se foi informado só options como closure
+        if (($options instanceof \Closure) && (is_null($callback))) {
+            $callback = $options;
+            $options = [];
+        }
+
+        if (is_string($options)) {
+            $options = ['prefix' => $options];
+        }
+
+        $prefix = array_key_exists('prefix', $options) ? $options['prefix'] : '';
+        $middlewares = array_merge([], array_key_exists('middlewares', $options) ? $options['middlewares'] : []);
+
+        $callback(new RouteCollection($this->collector, $prefix, $middlewares));
+
+        return $this;
+
+        //$this->collector->addGroup($prefix, function($collector) use ($callback, $prefix, $middlewares) {
+        //    $callback(new RouteCollection($collector, $prefix, $middlewares));
+        //});
     }
 }
