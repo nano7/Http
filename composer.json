@@ -20,11 +20,11 @@
 
     "autoload": {
         "files": [
-            "helpers.php"
+            "src/helpers.php"
         ],
 
         "psr-4": {
-            "Nano7\\Http\\": ""
+            "Nano7\\Http\\": "src/"
         }
     },
 
