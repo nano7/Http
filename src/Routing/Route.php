@@ -1,6 +1,6 @@
 <?php namespace Nano7\Http\Routing;
 
-use Illuminate\Http\Request;
+use Nano7\Http\Request;
 use Nano7\Foundation\Support\Arr;
 
 class Route

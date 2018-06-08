@@ -1,9 +1,10 @@
 <?php namespace Nano7\Http\Routing;
 
 use Nano7\View\View;
-use Illuminate\Http\Request;
+use Nano7\Http\Request;
+use Nano7\Http\Response;
+use Nano7\Http\JsonResponse;
 use FastRoute\Dispatcher as RouteDispatcher;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
@@ -34,7 +35,7 @@ class Router
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return JsonResponse|Response
      */
     public function handle(Request $request)
     {
@@ -106,7 +107,7 @@ class Router
      *
      * @param  \Symfony\Component\HttpFoundation\Request  $request
      * @param  mixed  $response
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @return Response|JsonResponse
      */
     public function prepareResponse($request, $response)
     {
@@ -118,7 +119,7 @@ class Router
      *
      * @param  \Symfony\Component\HttpFoundation\Request  $request
      * @param  mixed  $response
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @return Response|JsonResponse
      */
     public static function toResponse($request, $response)
     {

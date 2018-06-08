@@ -1,15 +1,16 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Response;
+use Nano7\Http\Request;
+use Nano7\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-if (! function_exists('request')) {
+if (!function_exists('request')) {
     /**
      * Get an instance of the current request or an input item from the request.
      *
-     * @param  string  $key
-     * @param  mixed   $default
-     * @return \Illuminate\Http\Request|string|array
+     * @param  string $key
+     * @param  mixed $default
+     * @return Request|string|array
      */
     function request($key = null, $default = null)
     {
@@ -21,28 +22,28 @@ if (! function_exists('request')) {
     }
 }
 
-if (! function_exists('response')) {
+if (!function_exists('response')) {
     /**
      * Return a new response from the application.
      *
-     * @param  string  $content
-     * @param  int     $status
-     * @param  array   $headers
-     * @return \Illuminate\Http\Response
+     * @param  string $content
+     * @param  int $status
+     * @param  array $headers
+     * @return Response
      */
     function response($content = '', $status = 200, array $headers = [])
     {
-        return new \Illuminate\Http\Response($content, $status, $headers);
+        return new Response($content, $status, $headers);
     }
 }
 
-if (! function_exists('url')) {
+if (!function_exists('url')) {
     /**
      * Generate a url for the application.
      *
-     * @param  string  $path
-     * @param  mixed   $parameters
-     * @param  bool    $secure
+     * @param  string $path
+     * @param  mixed $parameters
+     * @param  bool $secure
      * @return \Nano7\Http\UrlGenerator|string
      */
     function url($path = null, $parameters = [], $secure = null)
@@ -55,7 +56,7 @@ if (! function_exists('url')) {
     }
 }
 
-if (! function_exists('router')) {
+if (!function_exists('router')) {
     /**
      * @return \Nano7\Http\Routing\Router
      */
@@ -65,7 +66,7 @@ if (! function_exists('router')) {
     }
 }
 
-if (! function_exists('route')) {
+if (!function_exists('route')) {
     /**
      * @return \Nano7\Http\Routing\Route|null
      */
@@ -75,7 +76,7 @@ if (! function_exists('route')) {
     }
 }
 
-if (! function_exists('session')) {
+if (!function_exists('session')) {
     /**
      * @param null $key
      * @param null $default
@@ -93,7 +94,7 @@ if (! function_exists('session')) {
     }
 }
 
-if (! function_exists('cookie')) {
+if (!function_exists('cookie')) {
     /**
      * @param null $key
      * @param null $default
@@ -111,13 +112,13 @@ if (! function_exists('cookie')) {
     }
 }
 
-if (! function_exists('abort')) {
+if (!function_exists('abort')) {
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  \Symfony\Component\HttpFoundation\Response|int     $code
-     * @param  string  $message
-     * @param  array   $headers
+     * @param  Response|int $code
+     * @param  string $message
+     * @param  array $headers
      * @return void
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException

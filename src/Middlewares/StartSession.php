@@ -1,6 +1,6 @@
 <?php namespace Nano7\Http\Middlewares;
 
-use Illuminate\Http\Request;
+use Nano7\Http\Request;
 
 class StartSession
 {

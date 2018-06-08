@@ -2,7 +2,7 @@
 
 use Closure;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Nano7\Http\Request;
 use Nano7\Foundation\Support\Arr;
 use Nano7\Foundation\Support\Str;
 use Illuminate\Contracts\Routing\UrlRoutable;
@@ -12,7 +12,7 @@ class UrlGenerator
     /**
      * The request instance.
      *
-     * @var \Illuminate\Http\Request
+     * @var Request
      */
     protected $request;
 
@@ -82,7 +82,7 @@ class UrlGenerator
     /**
      * Create a new URL Generator instance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return void
      */
     public function __construct(Request $request)
@@ -273,7 +273,7 @@ class UrlGenerator
     /**
      * Determine if the given request has a valid signature.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return bool
      */
     public function hasValidSignature(Request $request)
@@ -468,7 +468,7 @@ class UrlGenerator
     /**
      * Get the request instance.
      *
-     * @return \Illuminate\Http\Request
+     * @return Request
      */
     public function getRequest()
     {
@@ -478,7 +478,7 @@ class UrlGenerator
     /**
      * Set the current request instance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return void
      */
     public function setRequest(Request $request)

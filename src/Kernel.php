@@ -1,7 +1,7 @@
 <?php namespace Nano7\Http;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Nano7\Http\Request;
+use Nano7\Http\Response;
 use Nano7\Http\Routing\Router;
 use Nano7\Foundation\Application;
 use Nano7\Http\Routing\Middlewares;

@@ -1,7 +1,7 @@
 <?php namespace Nano7\Http\Routing;
 
 use Closure;
-use Illuminate\Http\Request;
+use Nano7\Http\Request;
 
 class Middlewares
 {
