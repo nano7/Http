@@ -4,6 +4,21 @@ use Nano7\Http\Request;
 use Nano7\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+if (! function_exists('public_path')) {
+    /**
+     * Get the public application path.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function public_path($path = '')
+    {
+        $path = ($path != '') ? DIRECTORY_SEPARATOR . $path : $path;
+
+        return base_path('public' . $path);
+    }
+}
+
 if (!function_exists('request')) {
     /**
      * Get an instance of the current request or an input item from the request.
