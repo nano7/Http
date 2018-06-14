@@ -91,7 +91,7 @@ if (!function_exists('route')) {
     {
         $route = router()->route($name);
         if (is_null($route)) {
-            return null;
+            throw new Exception("Route name [$name] not found");
         }
 
         return $route->url($parameters);
