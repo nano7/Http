@@ -5,6 +5,11 @@ use FastRoute\RouteCollector;
 class RouteCollection
 {
     /**
+     * @var Router
+     */
+    protected $router;
+
+    /**
      * @var RouteCollector
      */
     protected $collector;
@@ -15,20 +20,29 @@ class RouteCollection
     protected $prefix = '';
 
     /**
+     * @var string
+     */
+    protected $name = '';
+
+    /**
      * @var array
      */
     protected $middlewares = [];
 
     /**
+     * @param Router $router
      * @param RouteCollector $collector
      * @param string $prefix
      * @param array $middlewares
+     * @param string $name
      */
-    public function __construct(RouteCollector $collector, $prefix, $middlewares)
+    public function __construct(Router $router, RouteCollector $collector, $prefix, $middlewares, $name)
     {
+        $this->router = $router;
         $this->collector = $collector;
         $this->prefix = $prefix;
         $this->middlewares = $middlewares;
+        $this->name = $name;
     }
 
     /**
@@ -59,7 +73,7 @@ class RouteCollection
      */
     public function get($route, $handler)
     {
-        return $this->addRoute(new Route(['GET','HEAD'], $route, $handler));
+        return $this->addRoute(new Route($this->router, ['GET','HEAD'], $route, $handler, $this->name));
     }
 
     /**
@@ -73,7 +87,7 @@ class RouteCollection
      */
     public function post($route, $handler)
     {
-        return $this->addRoute(new Route(['POST'], $route, $handler));
+        return $this->addRoute(new Route($this->router, ['POST'], $route, $handler, $this->name));
     }
 
     /**
@@ -87,7 +101,7 @@ class RouteCollection
      */
     public function put($route, $handler)
     {
-        return $this->addRoute(new Route(['PUT'], $route, $handler));
+        return $this->addRoute(new Route($this->router, ['PUT'], $route, $handler, $this->name));
     }
 
     /**
@@ -101,7 +115,7 @@ class RouteCollection
      */
     public function delete($route, $handler)
     {
-        return $this->addRoute(new Route(['DELETE'], $route, $handler));
+        return $this->addRoute(new Route($this->router, ['DELETE'], $route, $handler, $this->name));
     }
 
     /**
@@ -115,7 +129,7 @@ class RouteCollection
      */
     public function any($route, $handler)
     {
-        return $this->addRoute(new Route(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $route, $handler));
+        return $this->addRoute(new Route($this->router, ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], $route, $handler, $this->name));
     }
 
     /**
@@ -136,9 +150,10 @@ class RouteCollection
         }
 
         $prefix = array_key_exists('prefix', $options) ? $options['prefix'] : '';
+        $name   = array_key_exists('as', $options) ? $options['as'] : '';
         $middlewares = array_merge([], array_key_exists('middlewares', $options) ? $options['middlewares'] : []);
 
-        $callback(new RouteCollection($this->collector, $prefix, $middlewares));
+        $callback(new RouteCollection($this->router, $this->collector, $prefix, $middlewares, $name));
 
         return $this;
 

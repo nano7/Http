@@ -5,6 +5,14 @@ use Nano7\Foundation\Support\Arr;
 
 class Route
 {
+    /**
+     * @var Router
+     */
+    protected $router;
+
+    /**
+     * @var array
+     */
     protected $methods = [];
 
     /**
@@ -28,15 +36,27 @@ class Route
     protected $middlewares = [];
 
     /**
+     * @var string
+     */
+    protected $prefixName = '';
+
+    /**
+     * @var string|null
+     */
+    protected $name;
+
+    /**
      * @param $action
      * @param $params
      */
-    public function __construct($methods, $uri, $action)
+    public function __construct(Router $router, $methods, $uri, $action, $prefixName)
     {
+        $this->router  = $router;
         $this->methods = $methods;
         $this->uri     = $uri;
         $this->action  = $action;
         $this->params  = [];
+        $this->prefixName = ($prefixName == '') ? '' : $prefixName . '.';
     }
 
     /**
@@ -110,5 +130,23 @@ class Route
     public function middleware($middleware)
     {
         return $this->middlewares($middleware);
+    }
+
+    /**
+     * @param null $name
+     * @return $this|null|string
+     */
+    public function name($name = null)
+    {
+        if (is_null($name)) {
+            return $this->name;
+        }
+
+        $old = $this->name;
+        $this->name = ($name == '') ? null : $this->prefixName . $name;
+
+        $this->router->setNames($old, $this->name, $this);
+
+        return $this;
     }
 }

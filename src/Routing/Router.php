@@ -26,6 +26,11 @@ class Router
     protected $current;
 
     /**
+     * @var array
+     */
+    protected $allNames = [];
+
+    /**
      * Construtor.
      */
     public function __construct()
@@ -90,10 +95,13 @@ class Router
         return $this->current = $route;
     }
 
+    /**
+     * Carregar e preparar rotas.
+     */
     protected function prepareRoutes()
     {
         $this->dispatcher = \FastRoute\simpleDispatcher(function (\FastRoute\RouteCollector $collector) {
-            $router = new RouteCollection($collector, '', []);
+            $router = new RouteCollection($this, $collector, '', []);
 
             $route_file = app_path('routes.php');
             if (file_exists($route_file)) {
@@ -152,5 +160,39 @@ class Router
     public function middleware($alias, $middleware)
     {
         $this->middlewares->middleware($alias, $middleware);
+    }
+
+    /**
+     * Find a route by name.
+     *
+     * @param $name
+     * @return null|Route
+     */
+    public function route($name)
+    {
+        if (array_key_exists($name, $this->allNames)) {
+            return $this->allNames[$name];
+        }
+
+        return null;
+    }
+
+    /**
+     * Set name.
+     *
+     * @param $old
+     * @param $name
+     * @param Route $route
+     */
+    public function setNames($old, $name, Route $route)
+    {
+        // Verificar se tem old para remover
+        if ((! is_null($old)) && (isset($this->allNames[$old]))) {
+            unset($this->allNames[$old]);
+        }
+
+        if (! is_null($name)) {
+            $this->allNames[$name] = $route;
+        }
     }
 }

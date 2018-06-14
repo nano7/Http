@@ -85,9 +85,9 @@ if (!function_exists('route')) {
     /**
      * @return \Nano7\Http\Routing\Route|null
      */
-    function route()
+    function route($name)
     {
-        return router()->current();
+        return router()->route($name);
     }
 }
 
