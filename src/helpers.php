@@ -83,11 +83,18 @@ if (!function_exists('router')) {
 
 if (!function_exists('route')) {
     /**
-     * @return \Nano7\Http\Routing\Route|null
+     * @param string $name
+     * @param array $parameters
+     * @return string|null
      */
-    function route($name)
+    function route($name, $parameters = [])
     {
-        return router()->route($name);
+        $route = router()->route($name);
+        if (is_null($route)) {
+            return null;
+        }
+
+        return $route->url($parameters);
     }
 }
 

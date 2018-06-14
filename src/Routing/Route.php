@@ -1,5 +1,6 @@
 <?php namespace Nano7\Http\Routing;
 
+use Nano7\Foundation\Support\Str;
 use Nano7\Http\Request;
 use Nano7\Foundation\Support\Arr;
 
@@ -148,5 +149,25 @@ class Route
         $this->router->setNames($old, $this->name, $this);
 
         return $this;
+    }
+
+    /**
+     * @param array $parameters
+     * @return \Nano7\Http\UrlGenerator|string
+     * @throws \Exception
+     */
+    public function url($parameters = [])
+    {
+        $url = preg_replace_callback('/\{.*?\}/', function ($match) use (&$parameters) {
+            return (empty($parameters) && ! Str::endsWith($match[0], '?}'))
+                ? $match[0]
+                : array_shift($parameters);
+        }, $this->uri);
+
+        if (preg_match('/\{.*?\}/', $url)) {
+            throw new \Exception("Route erro parameters [$this->uri]");
+        }
+
+        return url($url);
     }
 }
