@@ -124,7 +124,14 @@ class Kernel
      */
     protected function renderException(HttpException $e)
     {
+        // Veriifcar se foi implemetado uma view no app
         $view = 'errors.' . $e->getStatusCode();
+        if (view()->exists($view)) {
+            return view($view)->render();
+        }
+
+        // Verificar se foi implememtado uma view no theme
+        $view = 'theme::errors.' . $e->getStatusCode();
         if (view()->exists($view)) {
             return view($view)->render();
         }
