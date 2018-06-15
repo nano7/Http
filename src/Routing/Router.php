@@ -120,7 +120,7 @@ class Router
     /**
      * Create a response instance from the given value.
      *
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  Request  $request
      * @param  mixed  $response
      * @return Response|JsonResponse
      */
@@ -132,7 +132,7 @@ class Router
     /**
      * Static version of prepareResponse.
      *
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  Request  $request
      * @param  mixed  $response
      * @return Response|JsonResponse
      */
@@ -150,7 +150,7 @@ class Router
             $response->setNotModified();
         }
 
-        return $response->prepare($request);
+        return $response->prepare($request->getBaseRequest());
     }
 
     /**

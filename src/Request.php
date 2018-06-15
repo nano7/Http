@@ -39,6 +39,11 @@ class Request
         return new Request($base);
     }
 
+    /**
+     * @param $key
+     * @param null $default
+     * @return mixed
+     */
     public function get($key, $default = null)
     {
         return $this->base->get($key, $default);
@@ -237,5 +242,13 @@ class Request
     public function session()
     {
         return $this->session;
+    }
+
+    /**
+     * @return BaseRequest
+     */
+    public function getBaseRequest()
+    {
+        return $this->base;
     }
 }
