@@ -80,7 +80,9 @@ class Route
      */
     protected function runClosure(Request $request)
     {
-        return call_user_func_array($this->action, $this->getParams($request));
+        $args = array_merge([], [$request], array_values($this->params));
+
+        return call_user_func_array($this->action, $args);
     }
 
 
@@ -90,22 +92,7 @@ class Route
      */
     protected function runController(Request $request)
     {
-        $action = $this->action;
-
-        if (!Str::is('*@*', $action)) {
-            $action .= '@handle';
-        }
-
-        return $this->router->app->call($action, $this->getParams($request));
-    }
-
-    /**
-     * @param Request $request
-     * @return array
-     */
-    protected function getParams(Request $request)
-    {
-        return array_merge([], [$request], array_values($this->params));
+        return $this->router->app->call($this->action, array_values($this->params), 'handle');
     }
 
     /**
