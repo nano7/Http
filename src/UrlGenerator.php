@@ -118,7 +118,7 @@ class UrlGenerator
      */
     public function previous($fallback = false)
     {
-        $referrer = $this->request->headers->get('referer');
+        $referrer = $this->request->headers()->get('referer');
 
         $url = $referrer ? $this->to($referrer) : $this->getPreviousUrlFromSession();
 

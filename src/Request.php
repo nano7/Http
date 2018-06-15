@@ -251,4 +251,20 @@ class Request
     {
         return $this->base;
     }
+
+    /**
+     * @return string
+     */
+    public function getScheme()
+    {
+        return $this->base->getScheme();
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\HeaderBag
+     */
+    public function headers()
+    {
+        return $this->base->headers;
+    }
 }
