@@ -71,6 +71,41 @@ if (!function_exists('url')) {
     }
 }
 
+if (! function_exists('redirect')) {
+    /**
+     * Get an instance of the redirector.
+     *
+     * @param  string|null  $to
+     * @param  int     $status
+     * @param  array   $headers
+     * @param  bool    $secure
+     * @return \Nano7\Http\Redirector|\Nano7\Http\RedirectResponse
+     */
+    function redirect($to = null, $status = 302, $headers = [], $secure = null)
+    {
+        if (is_null($to)) {
+            return app('redirect');
+        }
+
+        return app('redirect')->to($to, $status, $headers, $secure);
+    }
+}
+
+if (! function_exists('back')) {
+    /**
+     * Create a new redirect response to the previous location.
+     *
+     * @param  int    $status
+     * @param  array  $headers
+     * @param  mixed  $fallback
+     * @return \Nano7\Http\RedirectResponse
+     */
+    function back($status = 302, $headers = [], $fallback = false)
+    {
+        return app('redirect')->back($status, $headers, $fallback);
+    }
+}
+
 if (! function_exists('old')) {
     /**
      * Retrieve an old input item.
