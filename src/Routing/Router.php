@@ -1,10 +1,10 @@
 <?php namespace Nano7\Http\Routing;
 
-use Nano7\Foundation\Application;
 use Nano7\View\View;
 use Nano7\Http\Request;
 use Nano7\Http\Response;
 use Nano7\Http\JsonResponse;
+use Nano7\Foundation\Application;
 use FastRoute\Dispatcher as RouteDispatcher;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -86,14 +86,14 @@ class Router
     {
         $this->prepareRoutes();
 
-        $finded = $this->dispatcher->dispatch($request->getMethod(), $request->getPathInfo());
+        $finded = $this->dispatcher->dispatch($request->method(), $request->getPathInfo());
 
         if ($finded[0] == RouteDispatcher::NOT_FOUND) {
             throw new NotFoundHttpException;
         }
 
         if ($finded[0] == RouteDispatcher::METHOD_NOT_ALLOWED) {
-            throw new MethodNotAllowedHttpException([$request->getMethod()]);
+            throw new MethodNotAllowedHttpException([$request->method()]);
         }
 
         $route = $finded[1];

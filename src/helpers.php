@@ -151,7 +151,7 @@ if (!function_exists('session')) {
     /**
      * @param null $key
      * @param null $default
-     * @return mixed|\Nano7\Http\Session|string
+     * @return mixed|string|\Nano7\Http\Session\StoreInterface
      */
     function session($key = null, $default = null)
     {

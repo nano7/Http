@@ -89,13 +89,7 @@ class Kernel
     {
         $request = Request::capture();
         $request->setSession($this->app['session']);
-        $request->enableHttpMethodParameterOverride();
-
-        // Ajustar variaveis para o uso das funcoes url, route, redirect, possam levar para a estrutura nova
-        //$vars = $request->server->all();
-        //$vars['SCRIPT_NAME'] = str_replace('/runner.php', '/', $vars['SCRIPT_NAME']);
-        //$vars['REQUEST_URI'] = str_replace('/runner.php', '/', $vars['REQUEST_URI']);
-        //$request->server->replace($vars);
+        //$request->enableHttpMethodParameterOverride();
 
         $this->app->singleton('Nano7\Http\Request');
         $this->app->alias('request', 'Nano7\Http\Request');

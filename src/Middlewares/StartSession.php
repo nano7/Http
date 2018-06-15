@@ -10,9 +10,13 @@ class StartSession
      */
     public function handle(Request $request, $next)
     {
-        session()->setName(config('session.cookie', 'nano_session'));
-        session()->start();
+        $request->session()->name(config('session.cookie', 'nano_session'));
+        $request->session()->start();
 
-        return $next($request);
+        $response = $next($request);
+
+        $request->session()->resetFlashes();
+
+        return $response;
     }
 }
