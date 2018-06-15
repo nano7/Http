@@ -88,7 +88,7 @@ class Kernel
     protected function prepareRequest()
     {
         $request = Request::capture();
-        //$request->setSession(session()->driver());
+        $request->setSession($this->app['session']);
         $request->enableHttpMethodParameterOverride();
 
         // Ajustar variaveis para o uso das funcoes url, route, redirect, possam levar para a estrutura nova
