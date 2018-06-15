@@ -1,10 +1,7 @@
 <?php namespace Nano7\Http;
 
+use Nano7\Http\Session\PhpStore;
 use Nano7\Foundation\Support\ServiceProvider;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
-use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
-use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
 class WebServiceProviders extends ServiceProvider
 {
@@ -93,24 +90,8 @@ class WebServiceProviders extends ServiceProvider
      */
     protected function registerSession()
     {
-        $this->app->singleton('session.attributes', function () {
-            return new AttributeBag('_nn7_attributes');
-        });
-
-        $this->app->singleton('session.flashes', function () {
-            return new FlashBag('_nn7_flashes');
-        });
-
-        $this->app->singleton('session.storage', function () {
-            $handler = new \SessionHandler();
-
-            $bag = new MetadataBag('_nn7_meta');
-
-            return new PhpBridgeSessionStorage($handler, $bag);
-        });
-
-        $this->app->singleton('session', function ($app) {
-            return new Session($app['session.storage'], $app['session.attributes'], $app['session.flashes']);
+        $this->app->singleton('session', function () {
+            return new PhpStore();
         });
     }
 

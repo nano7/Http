@@ -1,5 +1,7 @@
 <?php namespace Nano7\Http;
 
+use Nano7\Http\Session\StoreInterface;
+
 class Redirector
 {
     /**
@@ -12,7 +14,7 @@ class Redirector
     /**
      * The session store instance.
      *
-     * @var Session
+     * @var StoreInterface
      */
     protected $session;
 
@@ -74,7 +76,7 @@ class Redirector
      */
     public function guest($path, $status = 302, $headers = [], $secure = null)
     {
-        $this->session->put('url.intended', $this->generator->full());
+        $this->session->set('url.intended', $this->generator->full());
 
         return $this->to($path, $status, $headers, $secure);
     }
@@ -90,7 +92,7 @@ class Redirector
      */
     public function intended($default = '/', $status = 302, $headers = [], $secure = null)
     {
-        $path = $this->session->pull('url.intended', $default);
+        $path = $this->session->get('url.intended', $default);
 
         return $this->to($path, $status, $headers, $secure);
     }
@@ -159,13 +161,17 @@ class Redirector
      */
     protected function createRedirect($path, $status, $headers)
     {
-        return tap(new RedirectResponse($path, $status, $headers), function ($redirect) {
-            if (isset($this->session)) {
-                $redirect->setSession($this->session);
-            }
+        $response = new RedirectResponse($path, $status, $headers);
 
-            $redirect->setRequest($this->generator->getRequest());
-        });
+        // Session
+        if (isset($this->session)) {
+            $response->setSession($this->session);
+        }
+
+        // Request
+        $response->setRequest($this->generator->getRequest());
+
+        return $response;
     }
 
     /**
@@ -181,10 +187,10 @@ class Redirector
     /**
      * Set the active session store.
      *
-     * @param  Session $session
+     * @param  StoreInterface $session
      * @return void
      */
-    public function setSession(Session $session)
+    public function setSession(StoreInterface $session)
     {
         $this->session = $session;
     }
