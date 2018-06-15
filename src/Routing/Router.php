@@ -101,7 +101,7 @@ class Router
     protected function prepareRoutes()
     {
         $this->dispatcher = \FastRoute\simpleDispatcher(function (\FastRoute\RouteCollector $collector) {
-            $router = new RouteCollection($this, $collector, '', []);
+            $router = new RouteCollection($this, $collector, '', [], '');
 
             $route_file = app_path('routes.php');
             if (file_exists($route_file)) {
