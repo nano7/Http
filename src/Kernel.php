@@ -97,6 +97,8 @@ class Kernel
         //$vars['REQUEST_URI'] = str_replace('/runner.php', '/', $vars['REQUEST_URI']);
         //$request->server->replace($vars);
 
+        $this->app->singleton('Nano7\Http\Request');
+        $this->app->alias('request', 'Nano7\Http\Request');
         $this->app->instance('request', $request);
 
         return $request;
