@@ -1,11 +1,6 @@
 <?php namespace Nano7\Http;
 
-use BadMethodCallException;
-use Illuminate\Support\Str;
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\ViewErrorBag;
-use Illuminate\Support\Traits\Macroable;
-use Illuminate\Contracts\Support\MessageProvider;
+use Nano7\Http\Session\StoreInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse as BaseRedirectResponse;
 
@@ -22,7 +17,7 @@ class RedirectResponse extends BaseRedirectResponse
     /**
      * The session store implementation.
      *
-     * @var Session
+     * @var StoreInterface
      */
     protected $session;
 
@@ -38,7 +33,7 @@ class RedirectResponse extends BaseRedirectResponse
         $key = is_array($key) ? $key : [$key => $value];
 
         foreach ($key as $k => $v) {
-            $this->session->flash($k, $v);
+            $this->session->setFlash($k, $v);
         }
 
         return $this;
@@ -96,75 +91,6 @@ class RedirectResponse extends BaseRedirectResponse
     }
 
     /**
-     * Flash an array of input to the session.
-     *
-     * @return $this
-     */
-    public function onlyInput()
-    {
-        return $this->withInput($this->request->only(func_get_args()));
-    }
-
-    /**
-     * Flash an array of input to the session.
-     *
-     * @return RedirectResponse
-     */
-    public function exceptInput()
-    {
-        return $this->withInput($this->request->except(func_get_args()));
-    }
-
-    /**
-     * Flash a container of errors to the session.
-     *
-     * @param  \Illuminate\Contracts\Support\MessageProvider|array|string  $provider
-     * @param  string  $key
-     * @return $this
-     */
-    public function withErrors($provider, $key = 'default')
-    {
-        $value = $this->parseErrors($provider);
-
-        $errors = $this->session->get('errors', new ViewErrorBag);
-
-        if (! $errors instanceof ViewErrorBag) {
-            $errors = new ViewErrorBag;
-        }
-
-        $this->session->flash(
-            'errors', $errors->put($key, $value)
-        );
-
-        return $this;
-    }
-
-    /**
-     * Parse the given errors into an appropriate value.
-     *
-     * @param  \Illuminate\Contracts\Support\MessageProvider|array|string  $provider
-     * @return \Illuminate\Support\MessageBag
-     */
-    protected function parseErrors($provider)
-    {
-        if ($provider instanceof MessageProvider) {
-            return $provider->getMessageBag();
-        }
-
-        return new MessageBag((array) $provider);
-    }
-
-    /**
-     * Get the original response content.
-     *
-     * @return null
-     */
-    public function getOriginalContent()
-    {
-        //
-    }
-
-    /**
      * Get the request instance.
      *
      * @return Request|null
@@ -188,7 +114,7 @@ class RedirectResponse extends BaseRedirectResponse
     /**
      * Get the session store implementation.
      *
-     * @return Session|null
+     * @return StoreInterface|null
      */
     public function getSession()
     {
@@ -198,29 +124,11 @@ class RedirectResponse extends BaseRedirectResponse
     /**
      * Set the session store implementation.
      *
-     * @param  Session  $session
+     * @param  StoreInterface $session
      * @return void
      */
-    public function setSession(Session $session)
+    public function setSession(StoreInterface $session)
     {
         $this->session = $session;
-    }
-
-    /**
-     * Dynamically bind flash data in the session.
-     *
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return $this
-     *
-     * @throws \BadMethodCallException
-     */
-    public function __call($method, $parameters)
-    {
-        if (Str::startsWith($method, 'with')) {
-            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
-        }
-
-        throw new BadMethodCallException("Method [$method] does not exist on Redirect.");
     }
 }

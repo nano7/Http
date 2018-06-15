@@ -3,9 +3,12 @@
 use Nano7\Foundation\Support\Str;
 use Nano7\Http\Session\StoreInterface;
 use Illuminate\Http\Request as BaseRequest;
+use Nano7\Http\Concerns\InteractsWithInput;
 
 class Request
 {
+    use InteractsWithInput;
+
     /**
      * @var \Illuminate\Http\Request
      */
