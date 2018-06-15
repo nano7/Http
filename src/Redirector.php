@@ -1,7 +1,5 @@
 <?php namespace Nano7\Http;
 
-use Illuminate\Http\RedirectResponse;
-
 class Redirector
 {
     /**
@@ -33,7 +31,7 @@ class Redirector
      * Create a new redirect response to the "home" route.
      *
      * @param  int  $status
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function home($status = 302)
     {
@@ -46,7 +44,7 @@ class Redirector
      * @param  int    $status
      * @param  array  $headers
      * @param  mixed  $fallback
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function back($status = 302, $headers = [], $fallback = false)
     {
@@ -58,7 +56,7 @@ class Redirector
      *
      * @param  int    $status
      * @param  array  $headers
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function refresh($status = 302, $headers = [])
     {
@@ -72,7 +70,7 @@ class Redirector
      * @param  int     $status
      * @param  array   $headers
      * @param  bool    $secure
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function guest($path, $status = 302, $headers = [], $secure = null)
     {
@@ -88,7 +86,7 @@ class Redirector
      * @param  int     $status
      * @param  array   $headers
      * @param  bool    $secure
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function intended($default = '/', $status = 302, $headers = [], $secure = null)
     {
@@ -104,7 +102,7 @@ class Redirector
      * @param  int     $status
      * @param  array   $headers
      * @param  bool    $secure
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function to($path, $status = 302, $headers = [], $secure = null)
     {
@@ -117,7 +115,7 @@ class Redirector
      * @param  string  $path
      * @param  int     $status
      * @param  array   $headers
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function away($path, $status = 302, $headers = [])
     {
@@ -130,7 +128,7 @@ class Redirector
      * @param  string  $path
      * @param  int     $status
      * @param  array   $headers
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function secure($path, $status = 302, $headers = [])
     {
@@ -144,7 +142,7 @@ class Redirector
      * @param  array   $parameters
      * @param  int     $status
      * @param  array   $headers
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function route($route, $parameters = [], $status = 302, $headers = [])
     {
@@ -157,7 +155,7 @@ class Redirector
      * @param  string  $path
      * @param  int     $status
      * @param  array   $headers
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     protected function createRedirect($path, $status, $headers)
     {

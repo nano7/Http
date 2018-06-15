@@ -17,6 +17,8 @@ class WebServiceProviders extends ServiceProvider
 
         $this->registerUrls();
 
+        $this->registerRedirect();
+
         $this->registerSession();
 
         $this->registerCookie();
@@ -57,6 +59,20 @@ class WebServiceProviders extends ServiceProvider
     {
         $this->app->singleton('url', function () {
             return new UrlGenerator($this->app['request']);
+        });
+    }
+
+    /**
+     * Register redirect.
+     */
+    protected function registerRedirect()
+    {
+        $this->app->singleton('redirect', function ($app) {
+            $redirect = new Redirector($app['url']);
+
+            $redirect->setSession($app['session']);
+
+            return $redirect;
         });
     }
 
