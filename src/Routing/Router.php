@@ -1,5 +1,6 @@
 <?php namespace Nano7\Http\Routing;
 
+use Nano7\Foundation\Application;
 use Nano7\View\View;
 use Nano7\Http\Request;
 use Nano7\Http\Response;
@@ -10,6 +11,11 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Router
 {
+    /**
+     * @var Application
+     */
+    public $app;
+
     /**
      * @var Middlewares
      */
@@ -33,8 +39,9 @@ class Router
     /**
      * Construtor.
      */
-    public function __construct()
+    public function __construct($app)
     {
+        $this->app = $app;
         $this->middlewares = new Middlewares();
     }
 

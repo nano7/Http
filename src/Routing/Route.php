@@ -66,9 +66,46 @@ class Route
      */
     public function run(Request $request)
     {
-        $args = array_merge([], [$request], array_values($this->params));
+        // Verificar se eh Controller
+        if (is_string($this->action)) {
+            return $this->runController($request);
+        }
 
-        return call_user_func_array($this->action, $args);
+        return $this->runClosure($request);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    protected function runClosure(Request $request)
+    {
+        return call_user_func_array($this->action, $this->getParams($request));
+    }
+
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    protected function runController(Request $request)
+    {
+        $action = $this->action;
+
+        if (!Str::is('*@*', $action)) {
+            $action .= '@handle';
+        }
+
+        return $this->router->app->call($action, $this->getParams($request));
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    protected function getParams(Request $request)
+    {
+        return array_merge([], [$request], array_values($this->params));
     }
 
     /**

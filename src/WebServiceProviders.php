@@ -65,8 +65,8 @@ class WebServiceProviders extends ServiceProvider
      */
     protected function registerRouting()
     {
-        $this->app->singleton('router', function () {
-            return new \Nano7\Http\Routing\Router();
+        $this->app->singleton('router', function ($app) {
+            return new \Nano7\Http\Routing\Router($app);
         });
     }
 

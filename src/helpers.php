@@ -116,7 +116,7 @@ if (!function_exists('session')) {
     /**
      * @param null $key
      * @param null $default
-     * @return mixed|\Nano7\Http\Session
+     * @return mixed|\Nano7\Http\Session|string
      */
     function session($key = null, $default = null)
     {
