@@ -7,6 +7,7 @@ use Nano7\Http\JsonResponse;
 use Nano7\Foundation\Application;
 use FastRoute\Dispatcher as RouteDispatcher;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Router
@@ -142,7 +143,7 @@ class Router
             $response = $response->render();
         }
 
-        if (! $response instanceof Response) {
+        if (! $response instanceof SymfonyResponse) {
             $response = response($response);
         }
 
