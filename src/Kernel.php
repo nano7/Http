@@ -31,7 +31,7 @@ class Kernel
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->middlewares = new Middlewares();
+        $this->middlewares = new Middlewares($app);
         $this->files = $this->app['files'];
     }
 

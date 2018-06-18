@@ -43,7 +43,7 @@ class Router
     public function __construct($app)
     {
         $this->app = $app;
-        $this->middlewares = new Middlewares();
+        $this->middlewares = new Middlewares($app);
     }
 
     /**

@@ -1,10 +1,16 @@
 <?php namespace Nano7\Http\Routing;
 
 use Closure;
+use Nano7\Foundation\Application;
 use Nano7\Http\Request;
 
 class Middlewares
 {
+    /**
+     * @var Application
+     */
+    protected $app;
+
     /**
      * @var array
      */
@@ -14,6 +20,14 @@ class Middlewares
      * @var array
      */
     protected $enabledAlias = [];
+
+    /**
+     * @param Application $app
+     */
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+    }
 
     /**
      * @param $alias
@@ -93,9 +107,10 @@ class Middlewares
         // Se for string mudar para closure
         if (is_string($middleware)) {
             $middleware = function ($request, $next) use ($middleware) {
-                $obj = new $middleware($this);
+                return $this->app->call($middleware, [$request, $next], 'handle');
+                //$obj = new $middleware($this);
 
-                return $obj->handle($request, $next);
+                //return $obj->handle($request, $next);
             };
         }
 
