@@ -88,6 +88,25 @@ class RedirectResponse extends BaseRedirectResponse
     }
 
     /**
+     * Flash a container of status to the session.
+     *
+     * @param  string $message
+     * @param  string $type
+     * @return $this
+     */
+    public function withStatus($message, $type = 'success')
+    {
+        $status = [
+            'message' => $message,
+            'type' => $type,
+        ];
+
+        $this->with('status', $status);
+
+        return $this;
+    }
+
+    /**
      * Remove all uploaded files form the given input array.
      *
      * @param  array  $input
