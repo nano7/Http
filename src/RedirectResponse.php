@@ -82,7 +82,7 @@ class RedirectResponse extends BaseRedirectResponse
             $errors = new MessageBag((array) $errors);
         }
 
-        $this->with('errors', $errors);
+        $this->with('errors', $errors->toArray());
 
         return $this;
     }
