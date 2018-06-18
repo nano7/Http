@@ -4,10 +4,12 @@ use Nano7\Foundation\Support\Str;
 use Nano7\Http\Session\StoreInterface;
 use Illuminate\Http\Request as BaseRequest;
 use Nano7\Http\Concerns\InteractsWithInput;
+use Nano7\Http\Concerns\InteractsWithFlashData;
 
 class Request
 {
     use InteractsWithInput;
+    use InteractsWithFlashData;
 
     /**
      * @var \Illuminate\Http\Request
