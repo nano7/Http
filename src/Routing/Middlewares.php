@@ -107,10 +107,9 @@ class Middlewares
         // Se for string mudar para closure
         if (is_string($middleware)) {
             $middleware = function ($request, $next) use ($middleware) {
-                return $this->app->call($middleware, [$request, $next], 'handle');
-                //$obj = new $middleware($this);
+                $obj = $this->app->make($middleware);
 
-                //return $obj->handle($request, $next);
+                return call_user_func_array([$obj, 'handle'], [$request, $next]);
             };
         }
 
