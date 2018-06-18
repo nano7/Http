@@ -42,13 +42,14 @@ trait Flashes
     }
 
     /**
+     * @param $key
      * @param $values
      */
-    public function setFlash($values)
+    public function setFlash($key, $values)
     {
         $values = (array) $values;
 
-        $this->set($this->getFlashKey(), $values);
+        $this->set($this->getFlashKey($key), $values);
     }
 
     /**
@@ -56,6 +57,6 @@ trait Flashes
      */
     public function resetFlashes()
     {
-        $this->setFlash([]);
+        $this->setFlash(null, []);
     }
 }
