@@ -9,12 +9,13 @@
 trait Flashes
 {
     /**
+     * @param $group
      * @param $key
      * @return string
      */
-    private function getFlashKey($key = null)
+    private function getFlashKey($group, $key = null)
     {
-        $str = '__flash';
+        $str = sprintf('__flash.%s', $group);
         if ($key) {
             $str .= '.' . $key;
         }
@@ -28,7 +29,7 @@ trait Flashes
      */
     public function hasFlash($key)
     {
-        return $this->has($this->getFlashKey($key));
+        return $this->has($this->getFlashKey('old', $key));
     }
 
     /**
@@ -38,7 +39,7 @@ trait Flashes
      */
     public function flash($key, $default = null)
     {
-        return $this->get($this->getFlashKey($key), $default);
+        return $this->get($this->getFlashKey('old', $key), $default);
     }
 
     /**
@@ -49,7 +50,7 @@ trait Flashes
     {
         $values = (array) $values;
 
-        $this->set($this->getFlashKey($key), $values);
+        $this->set($this->getFlashKey('new', $key), $values);
     }
 
     /**
@@ -57,6 +58,9 @@ trait Flashes
      */
     public function resetFlashes()
     {
-        $this->setFlash(null, []);
+        $newValues = $this->get($this->getFlashKey('new'), []);
+
+        $this->set($this->getFlashKey('old'), $newValues);
+        $this->set($this->getFlashKey('new'), []);
     }
 }
