@@ -138,12 +138,7 @@ if (!function_exists('route')) {
      */
     function route($name, $parameters = [])
     {
-        $route = router()->route($name);
-        if (is_null($route)) {
-            throw new Exception("Route name [$name] not found");
-        }
-
-        return $route->url($parameters);
+        return app('url')->route($name, $parameters);
     }
 }
 

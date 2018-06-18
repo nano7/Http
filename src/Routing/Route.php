@@ -192,6 +192,6 @@ class Route
             throw new \Exception("Route erro parameters [$this->uri]");
         }
 
-        return url($url);
+        return $url;
     }
 }

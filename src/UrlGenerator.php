@@ -177,6 +177,26 @@ class UrlGenerator
     }
 
     /**
+     * Generate an absolute URL to the route.
+     *
+     * @param $name
+     * @param array $parameters
+     * @return string
+     * @throws \Exception
+     */
+    public function route($name, $parameters = [])
+    {
+        $route = router()->route($name);
+        if (is_null($route)) {
+            throw new \Exception("Route name [$name] not found");
+        }
+
+        $route_url = $route->url($parameters);
+
+        return $this->to($route_url);
+    }
+
+    /**
      * Generate a secure, absolute URL to the given path.
      *
      * @param  string  $path
