@@ -39,6 +39,9 @@ class WebServiceProviders extends ServiceProvider
             $web->alias('cookie.add.queued');
             $web->alias('session.start');
 
+            // Executar evento para registro dos middlewares
+            event()->fire('web.middleware.register', [$web]);
+
             // Carregar middlewares
             $middleware_file = app_path('middlewares.php');
             if (file_exists($middleware_file)) {

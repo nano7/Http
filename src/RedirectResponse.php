@@ -1,5 +1,6 @@
 <?php namespace Nano7\Http;
 
+use Illuminate\Support\MessageBag;
 use Nano7\Http\Session\StoreInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse as BaseRedirectResponse;
@@ -65,6 +66,23 @@ class RedirectResponse extends BaseRedirectResponse
         $this->session->flashInput($this->removeFilesFromInput(
             ! is_null($input) ? $input : $this->request->input()
         ));
+
+        return $this;
+    }
+
+    /**
+     * Flash a container of errors to the session.
+     *
+     * @param  array|MessageBag $errors
+     * @return $this
+     */
+    public function withErrors($errors)
+    {
+        if (! $errors instanceof MessageBag) {
+            $errors = new MessageBag((array) $errors);
+        }
+
+        $this->with('errors', $errors);
 
         return $this;
     }
