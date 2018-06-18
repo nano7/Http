@@ -74,12 +74,17 @@ class RedirectResponse extends BaseRedirectResponse
      * Flash a container of errors to the session.
      *
      * @param  array|MessageBag $errors
+     * @param  string|null $message
      * @return $this
      */
-    public function withErrors($errors)
+    public function withErrors($errors, $message = null)
     {
         if (! $errors instanceof MessageBag) {
             $errors = new MessageBag((array) $errors);
+        }
+
+        if (! is_null($message)) {
+            $errors->add('__message', $message);
         }
 
         $this->with('errors', $errors->toArray());
