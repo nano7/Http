@@ -67,4 +67,19 @@ class PhpStore implements StoreInterface
 
         return Arr::has($_SESSION, $key);
     }
+
+    /**
+     * Remove key.
+     *
+     * @param $key
+     * @return bool
+     */
+    public function forget($key)
+    {
+        global $_SESSION;
+
+        Arr::forget($_SESSION, $key);
+
+        return true;
+    }
 }

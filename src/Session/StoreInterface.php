@@ -38,4 +38,12 @@ interface StoreInterface
      * @return bool
      */
     public function has($key);
+
+    /**
+     * Remove key.
+     *
+     * @param $key
+     * @return bool
+     */
+    public function forget($key);
 }
