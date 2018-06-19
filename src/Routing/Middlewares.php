@@ -132,7 +132,7 @@ class Middlewares
         if ($callback instanceof Closure) {
             $args = array_merge([], [$request, $last], $middleware->params);
 
-            return call_user_func_array($middleware->middleware, $args);
+            return call_user_func_array($callback, $args);
         }
 
         // Nao deu para rodar passa para o proximo
