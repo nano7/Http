@@ -1,12 +1,12 @@
 <?php namespace Nano7\Http;
 
+use Exception;
 use Nano7\Http\Request;
 use Nano7\Http\Response;
 use Nano7\Http\Routing\Router;
 use Nano7\Foundation\Application;
 use Nano7\Http\Routing\Middlewares;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Kernel
 {
@@ -53,10 +53,10 @@ class Kernel
             // Preparar rotas
             return $this->runRoute($request);
 
-        } catch (HttpException $e) {
-            return Router::toResponse($request, $this->renderException($e));
         } catch (\Exception $e) {
-            return Router::toResponse($request, sprintf('error: %s', $e->getMessage()));
+            $this->reportException($e);
+
+            return Router::toResponse($request, $this->renderException($request, $e));
         }
     }
 
@@ -115,23 +115,25 @@ class Kernel
     }
 
     /**
-     * @param HttpException $e
-     * @return string
+     * Render exception.
+     *
+     * @param Request $request
+     * @param Exception $e
+     * @return \Symfony\Component\HttpFoundation\Response|string
      */
-    protected function renderException(HttpException $e)
+    protected function renderException(Request $request, Exception $e)
     {
-        // Veriifcar se foi implemetado uma view no app
-        $view = 'errors.' . $e->getStatusCode();
-        if (view()->exists($view)) {
-            return view($view)->render();
-        }
+        $this->app['Nano7\Foundation\Contracts\Exception\ExceptionHandler']->render($request, $e);
+    }
 
-        // Verificar se foi implememtado uma view no theme
-        $view = 'theme::errors.' . $e->getStatusCode();
-        if (view()->exists($view)) {
-            return view($view)->render();
-        }
-
-        return 'error: ' . $e->getStatusCode();
+    /**
+     * Report Log exception.
+     *
+     * @param Exception $e
+     * @return void
+     */
+    protected function reportException(Exception $e)
+    {
+        $this->app['Nano7\Foundation\Contracts\Exception\ExceptionHandler']->report($e);
     }
 }
