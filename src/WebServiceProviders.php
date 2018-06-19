@@ -96,6 +96,7 @@ class WebServiceProviders extends ServiceProvider
         $this->app->singleton('session', function () {
             return new PhpStore();
         });
+        $this->app->alias('session', 'Nano7\Http\Session\StoreInterface');
     }
 
     /**
