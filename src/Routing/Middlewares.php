@@ -115,19 +115,21 @@ class Middlewares
      */
     protected function runMiddleware($request, $middleware, $last)
     {
-        // Se for string mudar para closure
-        if (is_string($middleware->middleware)) {
-            $middleware = function ($request, $next) use ($middleware) {
-                $obj = $this->app->make($middleware->middleware);
+        $callback = $middleware->middleware;
 
-                $args = array_merge([], [$request, $next], $middleware->params);
+        // Se for string mudar para closure
+        if (is_string($callback)) {
+            $callback = function () use ($middleware) {
+                $args = func_get_args();
+
+                $obj = $this->app->make($middleware->middleware);
 
                 return call_user_func_array([$obj, 'handle'], $args);
             };
         }
 
         // Executar middleware
-        if ($middleware->middleware instanceof Closure) {
+        if ($callback instanceof Closure) {
             $args = array_merge([], [$request, $last], $middleware->params);
 
             return call_user_func_array($middleware->middleware, $args);
