@@ -1,5 +1,6 @@
 <?php namespace Nano7\Http\Routing;
 
+use ___PHPSTORM_HELPERS\object;
 use Closure;
 use Nano7\Foundation\Application;
 use Nano7\Http\Request;
@@ -53,11 +54,21 @@ class Middlewares
         $list = [];
 
         foreach ($this->enabledAlias as $alias) {
+
+            // Tratar paramsno alias
+            list($alias, $params) = explode(':', $alias);
+            $params = is_null($params) ? [] : explode(',', $params);
+
             if (! array_key_exists($alias, $this->middlewares)) {
                 throw new \Exception(sprintf('Alias middleware %s not found', $alias));
             }
 
-            $list[] = $this->middlewares[$alias];
+            $m = (object) [
+                'middleware' => $this->middlewares[$alias],
+                'params' => $params,
+            ];
+
+            $list[] = $m;
         }
 
         return $list;
@@ -105,17 +116,21 @@ class Middlewares
     protected function runMiddleware($request, $middleware, $last)
     {
         // Se for string mudar para closure
-        if (is_string($middleware)) {
+        if (is_string($middleware->middleware)) {
             $middleware = function ($request, $next) use ($middleware) {
-                $obj = $this->app->make($middleware);
+                $obj = $this->app->make($middleware->middleware);
 
-                return call_user_func_array([$obj, 'handle'], [$request, $next]);
+                $args = array_merge([], [$request, $next], $middleware->params);
+
+                return call_user_func_array([$obj, 'handle'], $args);
             };
         }
 
         // Executar middleware
-        if ($middleware instanceof Closure) {
-            return $middleware($request, $last);
+        if ($middleware->middleware instanceof Closure) {
+            $args = array_merge([], [$request, $last], $middleware->params);
+
+            return call_user_func_array($middleware->middleware, $args);
         }
 
         // Nao deu para rodar passa para o proximo
