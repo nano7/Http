@@ -123,7 +123,7 @@ class Kernel
      */
     protected function renderException(Request $request, Exception $e)
     {
-        $this->app['Nano7\Foundation\Contracts\Exception\ExceptionHandler']->render($request, $e);
+        return $this->app['Nano7\Foundation\Contracts\Exception\ExceptionHandler']->render($request, $e);
     }
 
     /**
