@@ -70,11 +70,11 @@ class Kernel
     }
 
     /**
-     * @param Request $request
-     * @param Response $response
+     * @param $request
+     * @param $response
      * @return void
      */
-    protected function terminate(Request $request, Response $response)
+    protected function terminate($request, $response)
     {
         event()->fire('web.terminate', [$request, $response]);
     }
