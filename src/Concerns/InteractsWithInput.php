@@ -88,7 +88,15 @@ trait InteractsWithInput
      */
     public function filled($key)
     {
-        return $this->base->filled($key);
+        $keys = is_array($key) ? $key : func_get_args();
+
+        foreach ($keys as $value) {
+            if ($this->isEmptyString($value)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -99,7 +107,15 @@ trait InteractsWithInput
      */
     public function anyFilled($keys)
     {
-        return $this->base->anyFilled($keys);
+        $keys = is_array($keys) ? $keys : func_get_args();
+
+        foreach ($keys as $key) {
+            if ($this->filled($key)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -203,5 +219,18 @@ trait InteractsWithInput
     public function cookie($key = null, $default = null)
     {
         return $this->base->cookie($key, $default);
+    }
+
+    /**
+     * Determine if the given input key is an empty string for "has".
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    protected function isEmptyString($key)
+    {
+        $value = $this->input($key);
+
+        return ! is_bool($value) && ! is_array($value) && trim((string) $value) === '';
     }
 }
