@@ -37,9 +37,13 @@ class Kernel
 
     /**
      * Handle web.
+     *
+     * @return \Illuminate\Http\JsonResponse|JsonResponse|Response
      */
     public function handle()
     {
+        $response = '';
+
         try {
             // Set running mode
             $this->app->instance('mode', 'web');
@@ -51,13 +55,28 @@ class Kernel
             $request = $this->prepareRequest();
 
             // Preparar rotas
-            return $this->runRoute($request);
+            $response = $this->runRoute($request);
 
         } catch (\Exception $e) {
             $this->reportException($e);
 
-            return Router::toResponse($request, $this->renderException($request, $e));
+            $response = Router::toResponse($request, $this->renderException($request, $e));
         }
+
+        // Call terminate
+        $this->terminate($request, $response);
+
+        return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    protected function terminate(Request $request, Response $response)
+    {
+        event()->fire('web.terminate', [$request, $response]);
     }
 
     /**

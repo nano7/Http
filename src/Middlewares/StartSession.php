@@ -1,8 +1,9 @@
 <?php namespace Nano7\Http\Middlewares;
 
 use Nano7\Http\Request;
+use Nano7\Http\Routing\Middleware;
 
-class StartSession
+class StartSession extends Middleware
 {
     /**
      * @param Request $request
@@ -10,13 +11,14 @@ class StartSession
      */
     public function handle(Request $request, $next)
     {
+        // Register terminate
+        $this->terminate(function($request, $response) {
+            $request->session()->resetFlashes();
+        });
+
         $request->session()->name(config('session.cookie', 'nano_session'));
         $request->session()->start();
 
-        $response = $next($request);
-
-        $request->session()->resetFlashes();
-
-        return $response;
+        return $next($request);
     }
 }
