@@ -5,11 +5,13 @@ use Nano7\Http\Session\StoreInterface;
 use Illuminate\Http\Request as BaseRequest;
 use Nano7\Http\Concerns\InteractsWithInput;
 use Nano7\Http\Concerns\InteractsWithFlashData;
+use Nano7\Http\Concerns\InteractsWithContentTypes;
 
 class Request
 {
     use InteractsWithInput;
     use InteractsWithFlashData;
+    use InteractsWithContentTypes;
 
     /**
      * @var \Illuminate\Http\Request
@@ -268,5 +270,19 @@ class Request
     public function headers()
     {
         return $this->base->headers;
+    }
+
+    /**
+     * Returns the request body content.
+     *
+     * @param bool $asResource If true, a resource will be returned
+     *
+     * @return string|resource The request body content or a resource to read the body stream
+     *
+     * @throws \LogicException
+     */
+    public function getContent($asResource = false)
+    {
+        return $this->base->getContent($asResource);
     }
 }

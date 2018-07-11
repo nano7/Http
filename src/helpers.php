@@ -44,11 +44,16 @@ if (!function_exists('response')) {
      * @param  string $content
      * @param  int $status
      * @param  array $headers
-     * @return Response
+     * @return \Nano7\Http\ResponseFactory|Response
      */
-    function response($content = '', $status = 200, array $headers = [])
+    function response($content = null, $status = 200, array $headers = [])
     {
-        return new Response($content, $status, $headers);
+        $factory = app('response.factory');
+        if (is_null($content)) {
+            return $factory;
+        }
+
+        return $factory->make($content, $status, $headers);
     }
 }
 

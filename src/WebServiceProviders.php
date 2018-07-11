@@ -12,6 +12,8 @@ class WebServiceProviders extends ServiceProvider
     {
         $this->registerKernel();
 
+        $this->registerResponse();
+
         $this->registerUrls();
 
         $this->registerRedirect();
@@ -49,6 +51,21 @@ class WebServiceProviders extends ServiceProvider
             }
 
             return $web;
+        });
+    }
+
+    /**
+     * Register response factory.
+     */
+    protected function registerResponse()
+    {
+        $this->app->singleton('response.factory', function ($app) {
+            $factory = new ResponseFactory(
+                $app['view'],
+                $app['redirect']
+            );
+
+            return $factory;
         });
     }
 
