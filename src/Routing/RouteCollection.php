@@ -52,9 +52,9 @@ class RouteCollection
     protected function addRoute(Route $route)
     {
         // Adicionar prefixo do group
-        $uri = $this->prefix . $route->getUri();
+        $route->setUri($this->prefix . $route->getUri());
 
-        $this->collector->addRoute($route->getMethods(), $uri, $route);
+        $this->collector->addRoute($route->getMethods(), $route->getUri(), $route);
 
         // Adicionar middleware do group
         $route->middlewares($this->middlewares);

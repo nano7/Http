@@ -122,6 +122,17 @@ class Route
     }
 
     /**
+     * @param $value
+     * @return $this
+     */
+    public function setUri($value)
+    {
+        $this->uri = $value;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getMethods()
