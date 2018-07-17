@@ -22,7 +22,9 @@ class ApiController extends Controller
      */
     public function index(Request $request)
     {
-        return response()->json(['return' => 'index']);
+        $query = $this->load()->query();
+
+        return response()->json($query->get());
     }
 
     /**
@@ -282,7 +284,7 @@ class ApiController extends Controller
      */
     protected function getId(Request $request)
     {
-        $id = $request->route()->parameter('id');
+        $id = $request->route()->param('id');
         if (is_null($id)) {
             $this->error('Invalid Id', 500);
         }

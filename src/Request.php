@@ -285,4 +285,13 @@ class Request
     {
         return $this->base->getContent($asResource);
     }
+
+    /**
+     * Return current route.
+     * @return Routing\Route|null
+     */
+    public function route()
+    {
+        return router()->current();
+    }
 }
