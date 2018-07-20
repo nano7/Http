@@ -61,9 +61,12 @@ class WebServiceProviders extends ServiceProvider
     {
         $this->app->singleton('response.factory', function ($app) {
             $factory = new ResponseFactory(
-                $app['view'],
                 $app['redirect']
             );
+
+            $factory->setViewResolver(function() use ($app) {
+                return $app['view'];
+            });
 
             return $factory;
         });

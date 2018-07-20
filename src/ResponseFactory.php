@@ -9,9 +9,14 @@ class ResponseFactory
     /**
      * The view factory instance.
      *
-     * @var ViewFactory
+     * @var ViewFactory|null
      */
     protected $view;
+
+    /**
+     * @var null|\Closure
+     */
+    protected $viewResolver;
 
     /**
      * The redirector instance.
@@ -23,13 +28,11 @@ class ResponseFactory
     /**
      * Create a new response factory instance.
      *
-     * @param  ViewFactory $view
      * @param  Redirector  $redirector
      * @return void
      */
-    public function __construct(ViewFactory $view, Redirector $redirector)
+    public function __construct(Redirector $redirector)
     {
-        $this->view = $view;
         $this->redirector = $redirector;
     }
 
@@ -57,7 +60,7 @@ class ResponseFactory
      */
     public function view($view, $data = [], $status = 200, array $headers = [])
     {
-        return $this->make($this->view->make($view, $data), $status, $headers);
+        return $this->make($this->getView()->make($view, $data), $status, $headers);
     }
 
     /**
@@ -188,5 +191,32 @@ class ResponseFactory
     public function redirectToIntended($default = '/', $status = 302, $headers = [], $secure = null)
     {
         return $this->redirector->intended($default, $status, $headers, $secure);
+    }
+
+    /**
+     * @param $resolver
+     * @return $this
+     */
+    public function setViewResolver($resolver)
+    {
+        $this->viewResolver = $resolver;
+
+        return $this;
+    }
+
+    /**
+     * @return ViewFactory|null
+     */
+    protected function getView()
+    {
+        if (! is_null($this->view)) {
+            return $this->view;
+        }
+
+        if (is_null($this->viewResolver)) {
+            return null;
+        }
+
+        return $this->view = $this->viewResolver();
     }
 }
