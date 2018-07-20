@@ -1,5 +1,6 @@
 <?php namespace Nano7\Http\Routing;
 
+use Nano7\Http\Responsable;
 use Nano7\View\View;
 use Nano7\Http\Request;
 use Nano7\Http\Response;
@@ -141,6 +142,10 @@ class Router
     {
         if ($response instanceof View) {
             $response = $response->render();
+        }
+
+        if ($response instanceof Responsable) {
+            $response = $response->toResponse();
         }
 
         if (! $response instanceof SymfonyResponse) {
