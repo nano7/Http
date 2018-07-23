@@ -208,3 +208,25 @@ if (!function_exists('abort')) {
         throw new HttpException($code, $message, null, $headers);
     }
 }
+
+if (! function_exists('in_api')) {
+    /**
+     * Return if route is in api group.
+     *
+     * @return bool
+     */
+    function in_api()
+    {
+        // Verificar via marcador
+        if (app()->resolved('request_in_api') && (app('request_in_api') == true)) {
+            return true;
+        }
+
+        // Verificar via prefixo
+        if (\Illuminate\Support\Str::is('/api/*', request()->getPathInfo())) {
+            return true;
+        }
+
+        return false;
+    }
+}
