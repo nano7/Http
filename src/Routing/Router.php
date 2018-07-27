@@ -156,6 +156,15 @@ class Router
             $response->setNotModified();
         }
 
+        // Tratamento finais do response
+        $response = $response->prepare($request->getBaseRequest());
+
+        // Fix Content-Type to application/json
+        $charset = $response->getCharset() ?: 'UTF-8';
+        if (0 === stripos($response->headers->get('Content-Type'), 'application/json') && false === stripos($response->headers->get('Content-Type'), 'charset')) {
+            $response->headers->set('Content-Type', $response->headers->get('Content-Type').'; charset=' . $charset);
+        }
+
         return $response->prepare($request->getBaseRequest());
     }
 

@@ -75,7 +75,7 @@ class Middlewares
     }
 
     /**
-     * Executar os middlewares da estrutura antiga.
+     * Executar os middlewares.
      *
      * @param Request $request
      * @param callable $last
