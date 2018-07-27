@@ -165,7 +165,7 @@ class Router
             $response->headers->set('Content-Type', $response->headers->get('Content-Type').'; charset=' . $charset);
         }
 
-        return $response->prepare($request->getBaseRequest());
+        return $response;
     }
 
     /**
