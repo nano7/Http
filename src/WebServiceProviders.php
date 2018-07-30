@@ -34,13 +34,11 @@ class WebServiceProviders extends ServiceProvider
             $web = new \Nano7\Http\Kernel($app);
 
             // Carregar middlewares padroes
+            $web->middleware('web'); // Adicionar como group
+            $web->middleware('api'); // Adicionar como group
             $web->middleware('session.start',     '\Nano7\Http\Middlewares\StartSession');
             $web->middleware('session.api',       '\Nano7\Http\Middlewares\StartApi');
             $web->middleware('cookie.add.queued', '\Nano7\Http\Middlewares\AddQueuedCookies');
-
-            // Carregar alias padrao
-            //$web->alias('cookie.add.queued');
-            //$web->alias('session.start');
 
             // Executar evento para registro dos middlewares
             event()->fire('web.middleware.register', [$web]);

@@ -39,11 +39,17 @@ class Middlewares
     }
 
     /**
-     * @param string|Closure $middleware
+     * @param string|Closure|null $middleware
      */
-    public function middleware($alias, $middleware)
+    public function middleware($alias, $middleware = null)
     {
-        $this->middlewares[$alias] = $middleware;
+        if (! array_key_exists($alias, $this->middlewares)) {
+            $this->middlewares[$alias] = [];
+        }
+
+        if (! is_null($middleware)) {
+            $this->middlewares[$alias][] = $middleware;
+        }
     }
 
     /**
@@ -55,7 +61,7 @@ class Middlewares
 
         foreach ($this->enabledAlias as $alias) {
 
-            // Tratar paramsno alias
+            // Tratar parametros no alias
             list($alias, $params) = explode(':', $alias);
             $params = is_null($params) ? [] : explode(',', $params);
 
@@ -63,12 +69,15 @@ class Middlewares
                 throw new \Exception(sprintf('Alias middleware %s not found', $alias));
             }
 
-            $m = (object) [
-                'middleware' => $this->middlewares[$alias],
-                'params' => $params,
-            ];
+            $middleware_list = (array) $this->middlewares[$alias];
+            foreach ($middleware_list as $middleware) {
+                $m = (object) [
+                    'middleware' => $middleware,
+                    'params' => $params,
+                ];
 
-            $list[] = $m;
+                $list[] = $m;
+            }
         }
 
         return $list;

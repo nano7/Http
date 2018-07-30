@@ -112,10 +112,21 @@ class Router
         $this->dispatcher = \FastRoute\simpleDispatcher(function (\FastRoute\RouteCollector $collector) {
             $router = new RouteCollection($this, $collector, '', [], '');
 
-            $route_file = app_path('routes.php');
-            if (file_exists($route_file)) {
-                require $route_file;
-            }
+            // API
+            $router->group(['middlewares'=> 'api'], function(RouteCollection $router) {
+                $route_file = app_path('routes_api.php');
+                if (file_exists($route_file)) {
+                    require $route_file;
+                }
+            });
+
+            // WEB
+            $router->group(['middlewares'=> 'web'], function(RouteCollection $router) {
+                $route_file = app_path('routes.php');
+                if (file_exists($route_file)) {
+                    require $route_file;
+                }
+            });
         });
     }
 
