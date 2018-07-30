@@ -1,6 +1,5 @@
 <?php namespace Nano7\Http\Routing;
 
-use ___PHPSTORM_HELPERS\object;
 use Closure;
 use Nano7\Foundation\Application;
 use Nano7\Http\Request;
@@ -39,17 +38,11 @@ class Middlewares
     }
 
     /**
-     * @param string|Closure|null $middleware
+     * @param string|Closure $middleware
      */
-    public function middleware($alias, $middleware = null)
+    public function middleware($alias, $middleware)
     {
-        if (! array_key_exists($alias, $this->middlewares)) {
-            $this->middlewares[$alias] = [];
-        }
-
-        if (! is_null($middleware)) {
-            $this->middlewares[$alias][] = $middleware;
-        }
+        $this->middlewares[$alias] = $middleware;
     }
 
     /**
@@ -61,7 +54,7 @@ class Middlewares
 
         foreach ($this->enabledAlias as $alias) {
 
-            // Tratar parametros no alias
+            // Tratar paramsno alias
             list($alias, $params) = explode(':', $alias);
             $params = is_null($params) ? [] : explode(',', $params);
 
@@ -69,15 +62,12 @@ class Middlewares
                 throw new \Exception(sprintf('Alias middleware %s not found', $alias));
             }
 
-            $middleware_list = (array) $this->middlewares[$alias];
-            foreach ($middleware_list as $middleware) {
-                $m = (object) [
-                    'middleware' => $middleware,
-                    'params' => $params,
-                ];
+            $m = (object) [
+                'middleware' => $this->middlewares[$alias],
+                'params' => $params,
+            ];
 
-                $list[] = $m;
-            }
+            $list[] = $m;
         }
 
         return $list;

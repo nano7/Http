@@ -126,9 +126,9 @@ class Kernel
     }
 
     /**
-     * @param string|\Closure|null $middleware
+     * @param string|\Closure $middleware
      */
-    public function middleware($alias, $middleware = null)
+    public function middleware($alias, $middleware)
     {
         $this->middlewares->middleware($alias, $middleware);
     }
