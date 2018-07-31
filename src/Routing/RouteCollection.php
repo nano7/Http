@@ -42,7 +42,7 @@ class RouteCollection
         $this->collector = $collector;
         $this->prefix = $prefix;
         $this->middlewares = $middlewares;
-        $this->name = (($name != '') ? $name . '.' : $name;
+        $this->name = ($name != '') ? $name . '.' : $name;
     }
 
     /**
