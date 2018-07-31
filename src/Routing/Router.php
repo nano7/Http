@@ -113,10 +113,12 @@ class Router
             $router = new RouteCollection($this, $collector, '', [], '');
 
             // API
-            $route_file = app_path('routes_api.php');
-            if (file_exists($route_file)) {
-                require $route_file;
-            }
+            $router->group(['middlewares' => ['session.api']], function (RouteCollection $router) {
+                $route_file = app_path('routes_api.php');
+                if (file_exists($route_file)) {
+                    require $route_file;
+                }
+            });
 
             // WEB
             $route_file = app_path('routes.php');
