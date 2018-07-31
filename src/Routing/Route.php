@@ -57,7 +57,7 @@ class Route
         $this->uri     = $uri;
         $this->action  = $action;
         $this->params  = [];
-        $this->prefixName = ($prefixName == '') ? '' : $prefixName . '.';
+        $this->prefixName = $prefixName;
     }
 
     /**
