@@ -1,6 +1,8 @@
 <?php namespace Nano7\Http\Routing;
 
 use Nano7\Http\Request;
+use Nano7\Database\Model\Model;
+use Nano7\Foundation\Support\Arr;
 
 class ApiController extends Controller
 {
@@ -13,6 +15,16 @@ class ApiController extends Controller
      * @var Model
      */
     protected $model;
+
+    /**
+     * @var array
+     */
+    protected $exceptAttributes = [
+        '_id',
+        'id',
+        Model::CREATED_AT,
+        Model::UPDATED_AT,
+    ];
 
     /**
      * Display a listing of the resource.
@@ -168,14 +180,9 @@ class ApiController extends Controller
 
         // Atribuir valores
         $this->setValuesInModel($master, $values);
-        if ($master->isDirty() || (($master->isDirty() != true) && ($master->exists != true))) {
+        if ($master->hasChanged() || (($master->hasChanged() != true) && ($master->exists != true))) {
             $master->save();
         }
-
-        // Atribuir valores das tabelas extends
-        //foreach ($master->getExtends() as $extend) {
-        //    $this->setValuesExtend($master, $extend, $values, $id);
-        //}
 
         return $master->id;
     }
@@ -188,72 +195,10 @@ class ApiController extends Controller
     {
         // Atribuir valores ao model
         $array = (array) $values;
-        $array = array_except($array, $model->getExtends());
+        $array = Arr::except($array, $this->exceptAttributes);
 
         foreach ($array as $key => $value) {
             $model->setAttribute($key, $value);
-        }
-    }
-
-    /**
-     * @param Model $master
-     * @param $extend
-     * @param $values
-     * @param $id
-     */
-    protected function setValuesExtend(Model $master, $extend, $values, $id)
-    {
-        $values = (array) $values;
-
-        // Verificar extend existe
-        if (! array_key_exists($extend, $values)) {
-            return;
-        }
-
-        // Verificar se deve exluir extend
-        if ($values[$extend] === null) {
-            $this->setValuesExtendDelete($master, $extend, $id);
-            return;
-        }
-
-        $this->setValuesExtendCreateOrUpdate($master, $extend, $values, $id);
-    }
-
-    /**
-     * @param Model $master
-     * @param $extend
-     * @param $values
-     * @param $id
-     */
-    protected function setValuesExtendCreateOrUpdate(Model $master, $extend, $values, $id)
-    {
-        // Verificar se deve carregar extend model
-        if ($id !== false) {
-            $master->load($extend);
-        }
-        $eModel = $master->{$extend};
-
-        // Se model for nulo, deve criar um novo
-        if (is_null($eModel)) {
-            $eModel = $master->$extend()->make([]);
-        }
-
-        // Atribuir valores do model extend
-        $this->setValuesInModel($eModel, $values[$extend]);
-
-        // Salvar model do extend
-        $master->$extend()->save($eModel);
-    }
-
-    /**
-     * @param Model $master
-     * @param $extend
-     * @param $id
-     */
-    protected function setValuesExtendDelete(Model $master, $extend, $id)
-    {
-        if ($id !== false) {
-            $master->$extend()->delete();
         }
     }
 
@@ -267,11 +212,6 @@ class ApiController extends Controller
         $master = $this->model()->query()->find($id);
         if (is_null($master)) {
             return false;
-        }
-
-        // Excluir registros que extendem
-        foreach ($master->getExtends() as $extend) {
-            $master->$extend()->delete();
         }
 
         // Excluir master
