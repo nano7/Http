@@ -1,6 +1,7 @@
 <?php namespace Nano7\Http\Routing;
 
 use FastRoute\RouteCollector;
+use Nano7\Foundation\Support\Str;
 
 class RouteCollection
 {
@@ -42,7 +43,7 @@ class RouteCollection
         $this->collector = $collector;
         $this->prefix = $prefix;
         $this->middlewares = $middlewares;
-        $this->name = $name;
+        $this->name = (($name != '') && (! Str::endsWith('.', $name))) ? $name . '.'  :$name;
     }
 
     /**
@@ -149,9 +150,9 @@ class RouteCollection
             $options = ['prefix' => $options];
         }
 
-        $prefix = array_key_exists('prefix', $options) ? $options['prefix'] : '';
-        $name   = array_key_exists('as', $options) ? $options['as'] : '';
-        $middlewares = array_merge([], array_key_exists('middlewares', $options) ? $options['middlewares'] : []);
+        $prefix = $this->prefix . array_key_exists('prefix', $options) ? $options['prefix'] : '';
+        $name   = $this->name . array_key_exists('as', $options) ? $options['as'] : '';
+        $middlewares = array_merge([], $this->middlewares, array_key_exists('middlewares', $options) ? $options['middlewares'] : []);
 
         $callback(new RouteCollection($this->router, $this->collector, $prefix, $middlewares, $name));
 
