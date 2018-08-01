@@ -66,9 +66,9 @@ class ApiController extends Controller
         }
 
         // Salvar
-        $id = $this->setValues($obj);
+        $model = $this->setValues($obj);
 
-        return response()->json((object)['success' => true, 'id' => $id]);
+        return response()->json($model);
     }
 
     /**
@@ -168,7 +168,7 @@ class ApiController extends Controller
     /**
      * @param $values
      * @param bool $id
-     * @return int
+     * @return Model
      */
     protected function setValues($values, $id = false)
     {
@@ -184,7 +184,7 @@ class ApiController extends Controller
             $master->save();
         }
 
-        return $master->id;
+        return $master;
     }
 
     /**
