@@ -33,6 +33,13 @@ class WebServiceProviders extends ServiceProvider
         $this->app->singleton('kernel.web', function ($app) {
             $web = new \Nano7\Http\Kernel($app);
 
+            // Carregar grupo de middlewares
+            $web->middlewareGroup('web', []);
+
+            $web->middlewareGroup('api', [
+                'session.api',
+            ]);
+
             // Carregar middlewares padroes
             $web->middleware('session.api',       '\Nano7\Http\Middlewares\StartApi');
             $web->middleware('session.start',     '\Nano7\Http\Middlewares\StartSession');
