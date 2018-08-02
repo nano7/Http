@@ -92,6 +92,11 @@ class Kernel
             $router->middleware($alias, $middleware);
         }
 
+        // Transferir os middleware groups
+        foreach ($this->middlewares->getAllMiddlewareGroups() as $alias => $middleware) {
+            $router->middlewareGroup($alias, $middleware);
+        }
+
         // Transferir os alias
         foreach ($this->middlewares->getAlias() as $alias) {
             $router->alias($alias);
@@ -126,11 +131,21 @@ class Kernel
     }
 
     /**
+     * @param string $alias
      * @param string|\Closure $middleware
      */
     public function middleware($alias, $middleware)
     {
         $this->middlewares->middleware($alias, $middleware);
+    }
+
+    /**
+     * @param string $alias
+     * @param string|\Closure|array $middleware
+     */
+    public function middlewareGroup($alias, $middleware)
+    {
+        $this->middlewares->middlewareGroup($alias, $middleware);
     }
 
     /**

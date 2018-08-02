@@ -186,11 +186,21 @@ class Router
     }
 
     /**
+     * @param string $alias
      * @param string|\Closure $middleware
      */
     public function middleware($alias, $middleware)
     {
         $this->middlewares->middleware($alias, $middleware);
+    }
+
+    /**
+     * @param string $alias
+     * @param string|\Closure|array $middleware
+     */
+    public function middlewareGroup($alias, $middleware)
+    {
+        $this->middlewares->middlewareGroup($alias, $middleware);
     }
 
     /**
