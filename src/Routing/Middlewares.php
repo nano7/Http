@@ -6,6 +6,8 @@ use Nano7\Http\Request;
 
 class Middlewares
 {
+    use MiddlewareNameResolver;
+
     /**
      * @var Application
      */
@@ -77,21 +79,7 @@ class Middlewares
         $list = [];
 
         foreach ($this->enabledAlias as $alias) {
-
-            // Tratar paramsno alias
-            list($alias, $params) = explode(':', $alias);
-            $params = is_null($params) ? [] : explode(',', $params);
-
-            if (! array_key_exists($alias, $this->middlewares)) {
-                throw new \Exception(sprintf('Alias middleware %s not found', $alias));
-            }
-
-            $m = (object) [
-                'middleware' => $this->middlewares[$alias],
-                'params' => $params,
-            ];
-
-            $list[] = $m;
+            $list = array_merge($list, $this->resolveName($alias));
         }
 
         return $list;
@@ -132,20 +120,20 @@ class Middlewares
 
     /**
      * @param $request
-     * @param $middleware
+     * @param $rule
      * @param $last
      * @return mixed
      */
-    protected function runMiddleware($request, $middleware, $last)
+    protected function runMiddleware($request, $rule, $last)
     {
-        $callback = $middleware->middleware;
+        $callback = $rule->middleware;
 
         // Se for string mudar para closure
         if (is_string($callback)) {
-            $callback = function () use ($middleware) {
+            $callback = function () use ($rule) {
                 $args = func_get_args();
 
-                $obj = $this->app->make($middleware->middleware);
+                $obj = $this->app->make($rule->middleware);
 
                 return call_user_func_array([$obj, 'handle'], $args);
             };
@@ -153,7 +141,7 @@ class Middlewares
 
         // Executar middleware
         if ($callback instanceof Closure) {
-            $args = array_merge([], [$request, $last], $middleware->params);
+            $args = array_merge([], [$request, $last], $rule->params);
 
             return call_user_func_array($callback, $args);
         }
