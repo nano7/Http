@@ -19,6 +19,11 @@ class Middlewares
     /**
      * @var array
      */
+    protected $middlewareGroups = [];
+
+    /**
+     * @var array
+     */
     protected $enabledAlias = [];
 
     /**
@@ -43,6 +48,25 @@ class Middlewares
     public function middleware($alias, $middleware)
     {
         $this->middlewares[$alias] = $middleware;
+    }
+
+    /**
+     * @param string|Closure|array $middleware
+     */
+    public function middlewareGroup($alias, $middleware)
+    {
+        // Veriifcar se alias de grupo jah foi criado
+        if (! array_key_exists($alias, $this->middlewareGroups)) {
+            $this->middlewareGroups[$alias] = [];
+        }
+
+        // Verificar se foi informado como array
+        if (is_array($middleware)) {
+            $this->middlewareGroups[$alias] = array_merge([], $this->middlewareGroups[$alias], $middleware);
+            return;
+        }
+
+        $this->middlewareGroups[$alias][] = $middleware;
     }
 
     /**
@@ -144,6 +168,14 @@ class Middlewares
     public function getAllMiddlewares()
     {
         return $this->middlewares;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllMiddlewareGroups()
+    {
+        return $this->middlewareGroups;
     }
 
     /**
