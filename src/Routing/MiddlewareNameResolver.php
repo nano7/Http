@@ -14,6 +14,14 @@ trait MiddlewareNameResolver
      */
     protected function resolveName($name)
     {
+        // Verificar se name is callback
+        if ($name instanceof \Closure) {
+            return (object) [
+                'middleware' => $name,
+                'params' => [],
+            ];
+        }
+
         // Verificar se eh um group
         if (isset($this->middlewareGroups[$name])) {
             return $this->parseMiddlewareGroup($name);
