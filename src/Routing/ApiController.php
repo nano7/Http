@@ -19,7 +19,15 @@ class ApiController extends Controller
     /**
      * @var array
      */
-    protected $exceptAttributes = [
+    protected $exceptAttributesIn = [
+        // in... index
+        // in... show
+    ];
+
+    /**
+     * @var array
+     */
+    protected $exceptSetAttributes = [
         '_id',
         'id',
         Model::CREATED_AT,
@@ -36,7 +44,15 @@ class ApiController extends Controller
     {
         $query = $this->load()->query();
 
-        return response()->json($query->get());
+        $except = isset($this->exceptAttributesIn['index']) ? $this->exceptAttributesIn['index'] : [];
+
+        // Tratar attributes
+        $result = [];
+        foreach ($query->get() as $model) {
+            $result[] = Arr::except($model->toArray(), $except);
+        }
+
+        return response()->json($result);
     }
 
     /**
@@ -86,7 +102,10 @@ class ApiController extends Controller
             $this->error('Record not found', 404);
         }
 
-        return response()->json($model);
+        $except = isset($this->exceptAttributesIn['show']) ? $this->exceptAttributesIn['show'] : [];
+        $attrs = Arr::except($model->toArray(), $except);
+
+        return response()->json($attrs);
     }
 
     /**
@@ -195,7 +214,7 @@ class ApiController extends Controller
     {
         // Atribuir valores ao model
         $array = (array) $values;
-        $array = Arr::except($array, $this->exceptAttributes);
+        $array = Arr::except($array, $this->exceptSetAttributes);
 
         foreach ($array as $key => $value) {
             $model->setAttribute($key, $value);
