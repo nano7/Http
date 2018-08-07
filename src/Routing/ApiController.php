@@ -44,15 +44,16 @@ class ApiController extends Controller
     {
         $query = $this->load()->query();
 
+        /* Verificar como ira compilar...
         $except = isset($this->exceptAttributesIn['index']) ? $this->exceptAttributesIn['index'] : [];
 
         // Tratar attributes
         $result = [];
         foreach ($query->get() as $model) {
             $result[] = Arr::except($model->toArray(), $except);
-        }
+        }*/
 
-        return response()->json($result);
+        return response()->json($query->get());
     }
 
     /**
@@ -102,10 +103,12 @@ class ApiController extends Controller
             $this->error('Record not found', 404);
         }
 
+        /* Verificar como ira compilar...
         $except = isset($this->exceptAttributesIn['show']) ? $this->exceptAttributesIn['show'] : [];
         $attrs = Arr::except($model->toArray(), $except);
+        /**/
 
-        return response()->json($attrs);
+        return response()->json($model);
     }
 
     /**
