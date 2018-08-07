@@ -16,10 +16,10 @@ trait MiddlewareNameResolver
     {
         // Verificar se name is callback
         if ($name instanceof \Closure) {
-            return (object) [
+            return [(object) [
                 'middleware' => $name,
                 'params' => [],
-            ];
+            ]];
         }
 
         // Verificar se eh um group
