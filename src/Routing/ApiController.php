@@ -246,34 +246,6 @@ class ApiController extends Controller
      */
     protected function getId(Request $request)
     {
-        $id = $request->route()->param('id');
-        if (is_null($id)) {
-            $this->error('Invalid Id', 500);
-        }
-
-        return $id;
-    }
-
-    /**
-     * @param Request $request
-     * @return object
-     */
-    protected function getJsonContent(Request $request)
-    {
-        if ($request->isJson()) {
-            return json_decode($request->getContent());
-        }
-
-        return (object) $request->all();
-    }
-
-    /**
-     * @param $message
-     * @param $code
-     * @throws \Exception
-     */
-    protected function error($message, $code)
-    {
-        throw new \Exception($message, $code);
+        return $this->param($request, 'id');
     }
 }
