@@ -3,6 +3,7 @@
 use Nano7\Http\Request;
 use Nano7\Database\Model\Model;
 use Nano7\Foundation\Support\Arr;
+use Nano7\Foundation\Support\Str;
 
 class ApiController extends Controller
 {
@@ -268,8 +269,8 @@ class ApiController extends Controller
 
         $params = $mtd->getParameters();
         foreach ($params as $p) {
-            $pn = $p->getName();
-            $pdv = $p->getDefaultValue();
+            $pn = Str::unstudly($p->getName());
+            $pdv = $p->isOptional() ? $p->getDefaultValue() : null;
 
             $args[] = $request->get($pn, $pdv);
         }
