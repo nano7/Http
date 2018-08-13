@@ -248,4 +248,32 @@ class ApiController extends Controller
     {
         return $this->param($request, 'id');
     }
+
+    /**
+     * @param Request $request
+     * @param $model
+     * @param $method
+     * @return array
+     * @throws \Exception
+     */
+    protected function getArguments(Request $request, $model, $method)
+    {
+        $args = [];
+
+        $ref = new \ReflectionClass($model);
+        $mtd = $ref->getMethod($method);
+        if (is_null($mtd)) {
+            throw new \Exception("Method [$method] nof found");
+        }
+
+        $params = $mtd->getParameters();
+        foreach ($params as $p) {
+            $pn = $p->getName();
+            $pdv = $p->getDefaultValue();
+
+            $args[] = $request->get($pn, $pdv);
+        }
+
+        return $args;
+    }
 }
