@@ -92,7 +92,7 @@ class Route
      */
     protected function runController(Request $request)
     {
-        return $this->router->app->call($this->action, array_values($this->params), 'handle');
+        return $this->router->app->call($this->action, $this->params, 'handle');
     }
 
     /**
