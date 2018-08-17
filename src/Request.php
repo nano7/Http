@@ -179,7 +179,9 @@ class Request
      */
     public function is()
     {
-        return $this->base->is();
+        $args = func_get_args();
+
+        return call_user_func_array([$this->base, 'is'], $args);
     }
 
     /**
@@ -189,7 +191,9 @@ class Request
      */
     public function fullUrlIs()
     {
-        return $this->base->fullUrlIs();
+        $args = func_get_args();
+
+        return call_user_func_array([$this->base, 'fullUrlIs'], $args);
     }
 
     /**
