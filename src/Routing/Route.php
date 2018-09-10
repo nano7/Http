@@ -1,8 +1,8 @@
 <?php namespace Nano7\Http\Routing;
 
-use Nano7\Foundation\Support\Str;
+use Nano7\Support\Arr;
+use Nano7\Support\Str;
 use Nano7\Http\Request;
-use Nano7\Foundation\Support\Arr;
 
 class Route
 {

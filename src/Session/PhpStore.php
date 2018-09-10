@@ -1,6 +1,6 @@
 <?php namespace Nano7\Http\Session;
 
-use Nano7\Foundation\Support\Arr;
+use Nano7\Support\Arr;
 
 class PhpStore implements StoreInterface
 {

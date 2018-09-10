@@ -1,9 +1,9 @@
 <?php namespace Nano7\Http\Routing;
 
+use Nano7\Support\Arr;
+use Nano7\Support\Str;
 use Nano7\Http\Request;
 use Nano7\Database\Model\Model;
-use Nano7\Foundation\Support\Arr;
-use Nano7\Foundation\Support\Str;
 
 class ApiController extends Controller
 {

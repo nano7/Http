@@ -1,6 +1,6 @@
 <?php namespace Nano7\Http;
 
-use Nano7\Foundation\Support\Arr;
+use Nano7\Support\Arr;
 use Symfony\Component\HttpFoundation\Cookie;
 
 class CookieManager

@@ -1,6 +1,6 @@
 <?php namespace Nano7\Http;
 
-use Nano7\Foundation\Support\Str;
+use Nano7\Support\Str;
 use Nano7\View\Factory as ViewFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
