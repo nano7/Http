@@ -302,12 +302,13 @@ class Request
     /**
      * Get json request.
      *
+     * @param bool $forceJson
      * @param bool $returnAllIfNotJson
      * @return mixed|null|object
      */
-    public function json($returnAllIfNotJson = true)
+    public function json($forceJson = false, $returnAllIfNotJson = true)
     {
-        if ($this->isJson()) {
+        if ($forceJson || $this->isJson()) {
             return json_decode($this->getContent());
         }
 
