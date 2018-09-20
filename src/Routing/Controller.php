@@ -18,11 +18,7 @@ class Controller
      */
     protected function getJsonContent(Request $request)
     {
-        if ($request->isJson()) {
-            return json_decode($request->getContent());
-        }
-
-        return (object) $request->all();
+        return $request->json();
     }
 
     /**

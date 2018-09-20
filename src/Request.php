@@ -298,4 +298,23 @@ class Request
     {
         return router()->current();
     }
+
+    /**
+     * Get json request.
+     *
+     * @param bool $returnAllIfNotJson
+     * @return mixed|null|object
+     */
+    public function json($returnAllIfNotJson = true)
+    {
+        if ($this->isJson()) {
+            return json_decode($this->getContent());
+        }
+
+        if (! $returnAllIfNotJson) {
+            return null;
+        }
+
+        return (object) $this->all();
+    }
 }
